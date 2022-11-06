@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block links %}
+    <link href="{{ url_for('static', filename='css/posts.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<h1>Dashboard - todays posts</h1>
+<div class="post-container">
+    {% for post in context %}
+        <div class="post-wrapper">
+            <div class="user-banner">
+                <img src="{{ post.user.profile_picture }}" alt="" class="user-img">
+                <div class="user-info">
+                    <span class="username">{{ post.user.username }}</span>
+                    <span class="user-details">
+                        {% if post.metadata.location.location_name %}<a target="_blank" href="https://maps.google.com/?q={{ post.metadata.location.latitude }},{{ post.metadata.location.longitude }}">{{ post.metadata.location.location_name }}</a> • {% endif %}
+                        {{ post.time.late }}h late ({{ post.time.takenAt }} ➝ {{ post.time.creationTime }})</span>
+                </div>
+            </div>
+            <div class="post-content-wrapper">
+                <div class="row">
+                    <div class="col m6 s6">
+                        <img class="post-img" src="{{ post.url1 }}">
+                    </div>
+                    <div class="col m6 s6">
+                        <img class="post-img" src="{{ post.url2 }}">
+                    </div>
+                    {% if post.caption %}
+                    <div class="col s12 caption">
+                        <span class="small-heading">{{ post.caption }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="realmoji-wrapper">
+                    <span class="small-heading">RealMojis</span>
+                    <div class="realmoji-container">
+                        {% for image in post.realmojis %}
+                        <div class="realmoji">
+                            <img src="{{ image.url }}" class="realmoji-image">
+                            <span>{{ image.username }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <span class="small-heading">Kommentare</span>
+            {% for comment in post.comments %}
+                <p>{{ comment.username}}: {{ comment.text }}</p>
+                <!--<p>{{ comment.time }}</p>-->
+            {% endfor %}
+            <div class="input-field col s12">
+                <input id="comment-{{ post.id }}" type="text" placeholder="Kommentar hinzufügen...">
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+
+
+<script>
+    $(document).ready(function(){
+        console.log("initialising...");
+        $('.carousel').carousel();
+    });
+</script>
+
+{% endblock %}

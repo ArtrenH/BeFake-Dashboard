@@ -1,0 +1,128 @@
+.post-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.post-wrapper {
+    background: black;
+    border: 3px solid white;
+    border-radius: 30px;
+    padding: 20px;
+}
+
+.post-img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.user-banner {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info .username {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.user-info .user-details {
+    color: hsl(0, 0%, 70%)
+}
+
+.user-img {
+    width: clamp(50px, 5%, 5%);
+    margin-right: 10px;
+    border-radius: 100%;
+}
+
+.user-info {
+    max-width: 100%;
+}
+
+.user-details i {
+    font-size: inherit !important;
+}
+
+.post-content-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.realmoji-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+@media only screen and (max-width: 1000px) {
+    .post-content-wrapper {
+        flex-direction: column;
+        gap: 0;
+    }
+    .realmoji-container {
+        flex-direction: row !important;
+    }
+}
+
+.post-content-wrapper .row {
+    flex: 6;
+}
+.post-content-wrapper .realmoji-container {
+    flex: 1;
+}
+
+.realmoji-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.small-heading {
+    font-size: clamp(1rem, 2vw, 2rem);
+    margin-bottom: 10px;
+}
+
+.realmoji {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+
+.realmoji-image {
+    width: 100px;
+    border-radius: 100%;
+}
+
+.user-img:hover, .realmoji-image:hover {
+    animation: rotate 1s infinite ease;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.input-field input {
+    color: white;
+}
+
+/* label underline focus color */
+.input-field input[type=text]:focus {
+    border-bottom: 1px solid #fff !important;
+    box-shadow: 0 1px 0 0 #fff !important;
+}

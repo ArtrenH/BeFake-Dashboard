@@ -1,0 +1,18 @@
+body {
+    /*background: black;*/
+    /*background-image: url("https://preview.redd.it/52lpucn7yj351.jpg?width=6016&format=pjpg&auto=webp&s=d60635e3500e3943c5799d2219fe599f4ec25611");*/
+    background-color: black;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+}
+
+nav {
+    background: black;
+}
+.navbar-image {
+    margin-top: 1%;
+    margin-left: 2%;
+    height: 100%;
+
+}

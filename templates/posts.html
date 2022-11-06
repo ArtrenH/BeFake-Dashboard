@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block links %}
+    <link href="{{ url_for('static', filename='css/posts.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<h1>Hier sind aktuelle Posts...</h1>
+
+<div class="row"> 
+    <div class="col s6 m6 offset-s3 offset-m2">
+        {% for post in context %}
+            <div class="card deep-purple lighten-2">
+                <div class="card-content white-text">
+                    <span class="card-title">{{ post.caption }}:</span>
+                    <span>Zeit: {{ post.time }}</span>
+                    <span>Late: {{ post.late }}</span>
+                    <div class="row image_row">
+                        <div class="col m5">
+                            <img class="center" src="{{ post.url1 }}" width="300px" height="400px">
+                            <p class="bildunterschrift">Front Camera</p>
+                        </div>
+                        <div class="col m5">
+                            <img class="center" src="{{ post.url2 }}" width="300px" height="400px">
+                            <p class="bildunterschrift">Back Camera</p>
+                        </div>
+                        <div class="col m2">
+                            Reactions:
+                            {% for image in post.realmojis %}
+                                <img src="{{ image.url }}" width="100px" height="100px">
+                                <p>{{ image.username }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+
+
+<style>
+    .card {
+        width: 1000px;
+    }
+    .username_header {
+        margin-left: 3.75%;
+    }
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        /*margin-bottom: 10%;*/
+    }
+    .bildunterschrift {
+        text-align: center;
+    }
+    body {
+        background-color: aquamarine;
+    }
+</style>
+
+<script>
+    $(document).ready(function(){
+        console.log("initialising...");
+        $('.carousel').carousel();
+    });
+</script>
+
+{% endblock %}

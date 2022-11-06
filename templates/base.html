@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<link rel="icon" href="https://bere.al/favicon.ico">-->
+    <link rel="icon" href="https://www.google.com/s2/favicons?domain=https://bere.al/">
+    <link rel="apple-touch-icon" href="https://bere.al/images/logos/bereal.png">
+    <title>BeReal-Dashboard</title>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet" type="text/css">
+    {% block links %}
+
+    {% endblock %}
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/">
+                <img class="navbar-image" src="{{ url_for('static', filename='images/befake-white.png') }}" alt="">
+            </a>
+            <ul id="nav-bar" class="right hide-on-med-and-down">
+                <li><a href="today">today</a></li>
+                <li><a href="posts">posts</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    
+</body>
+</html>
