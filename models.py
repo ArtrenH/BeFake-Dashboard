@@ -31,8 +31,17 @@ class UIPost():
         self.longitude = data_dict.get("location", {}).get("_longitude", None)
         self.location_name = None
         if self.latitude:
-            cur_loc = Nominatim(user_agent="test").reverse((self.latitude, self.longitude)).raw
-            self.location_name = f"{cur_loc['address']['city']}, {cur_loc['address']['city_district']}"
+            # this seems to take some time
+            cur_loc = Nominatim(user_agent="test").reverse((self.latitude, self.longitude)).raw['address']
+            if 'city' in cur_loc:
+                if 'city_distroct' in cur_loc:
+                    self.location_name = f"{cur_loc['city']}, {cur_loc['city_district']}"
+                elif 'suburb' in cur_loc:
+                    self.location_name = f"{cur_loc['city']}, {cur_loc['suburb']}"
+            elif 'village' in cur_loc:
+                self.location_name = f"{cur_loc['village']}, {cur_loc['county']}"
+        
+
         # metadata auf steroirds
         self.media_type = data_dict.get("mediaType", None)
         self.region = data_dict.get("region")
@@ -113,6 +122,16 @@ class UIComment():
             "time": sec_to_timestamp(self.time)
         }
 
+class UIUser():
+    def __init__(self, data_dict) -> None:
+        print(data_dict)
+        return
+    
+    def render(self):
+        return {
+
+        }
+
 
 def second_stamp(seconds):
     return str(datetime.timedelta(seconds=seconds))
@@ -123,7 +142,8 @@ def latest_posts():
     #    return json.load(f)
     try:
         bf = BeFake.BeFake()
-        bf.load(TOKEN_PATH)
+        #bf.load(TOKEN_PATH)
+        bf.load()
         return_data = [UIPost(elem.data_dict).render() for elem in bf.get_friends_feed()]
     except ReadTimeout:
         return_data = []
@@ -132,7 +152,33 @@ def latest_posts():
     return return_data
 
 
+def users():
+    return os.listdir(f"{DATA_DIR}/feeds/friends")
+    bf = BeFake.BeFake()
+    try:
+        bf.load()
+    except:
+        raise Exception("No token found, are you logged in?")
+    usernames = os.listdir(f"{DATA_DIR}/feeds/friends")
+    user_ids = []
+    for user in usernames:
+        example_post_path = os.path.join(
+            f"{DATA_DIR}/feeds/friends/{user}",
+            os.listdir(f"{DATA_DIR}/feeds/friends/{user}")[0], "info.json"
+        )
+        with open(example_post_path, "r") as f:
+            example_post = json.load(f)
+        user_ids.append(example_post["ownerID"])
+    
+    return [UIUser(user_data).render() for user_data in [
+        bf.get_user_profile(user_id) for user_id in user_ids
+    ]]
+    
+        
+
+
 def posts(username):
+    print("posts called...")
     if username not in os.listdir(f"{DATA_DIR}/feeds/friends"):
         return {"error": "User not found/your not friends with this user"}
     post_ids = [elem for elem in os.listdir(f"{DATA_DIR}/feeds/friends/{username}") if elem != ".DS_Store"]
@@ -140,19 +186,14 @@ def posts(username):
     for post_id in post_ids:
         with open(f"{DATA_DIR}/feeds/friends/{username}/{post_id}/info.json", "r") as f:
             cur_data = json.load(f)
-        return_data.append({
-            "id": cur_data["id"],
-            "url1": cur_data.get("photoURL", ""),
-            "url2": cur_data.get("secondaryPhotoURL", ""),
-            "caption": cur_data.get("caption", "Keine Caption angegeben..."),
-            "createdAt": cur_data["creationDate"]["_seconds"],
-            "time": sec_to_timestamp(cur_data["creationDate"]["_seconds"]),
-            "late": cur_data.get("lateInSeconds", 0),
-            "realmojis": [{
-                "url": realmoji["uri"],
-                "username": realmoji["userName"]
-            } for realmoji in cur_data.get("realMojis", [])]
-        })
-    return_data = sorted(return_data, key=lambda x: x["createdAt"], reverse=True)
+        return_data.append(UIPost(cur_data).render())
+    return_data = sorted(return_data, key=lambda x: x["time"]["creationTime"], reverse=True)
     return return_data
 
+
+#users()
+
+if __name__ == "__main__":
+    data = {'result': {'userName': 'pelleje', 'uid': 'XLwHWNFemyP3Cpf94Oy7YVUt8jt2', 'name': 'Pelle Lol', 'photoURL': 'Photos/XLwHWNFemyP3Cpf94Oy7YVUt8jt2/profile/XLwHWNFemyP3Cpf94Oy7YVUt8jt2-1661977371-profile-picture.jpg', 'biography': 'süß(nicht)', 'location': '', 'creationDate': {'_seconds': 1661864291, '_nanoseconds': 786000000}, 'commonFriends': ['tB7r5q5gZrVxftkWXZb0kHsIUK82', 'flWFmy4YPvNDbLFxSnuKf73Nwys2', 'B6wVEyDZ4gUIvoe8EWseMPoNM782', 'jM3PDsCqdyfjIFXarBxotyHEDNB2', 'FXjEeCwIRwXl6mHdcaOjixaDH6A2', 'OfJkmi38yRVm0eYsUAFfkjTQVPi2', 'H1wczdYINbatC5uEILeUnYrQLZ93', '8tpxaYsKa1aXmIJkaFiSn2vPkUk2']}}
+    with open("dashboard/static/json/example_user.json", "w+") as f:
+        json.dump(data, f, indent=4)

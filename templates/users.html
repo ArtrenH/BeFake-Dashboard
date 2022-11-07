@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block links %}
+    <link href="{{ url_for('static', filename='css/posts.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Users:</h1>
+
+
+<ul class="collapsible">
+    {% for user in context: %}
+    <li>
+        <div class="collapsible-header"><i class="material-icons">filter_drama</i>
+            <a href="/user/{{ user }}" target="_blank"">{{ user }}</a>
+        </div>
+        <!--<div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>-->
+      </li>
+    {% endfor %}
+</ul>
+
+<script>
+    $(document).ready(function(){
+        $('.collapsible').collapsible();
+    });
+</script>
+{% endblock %}

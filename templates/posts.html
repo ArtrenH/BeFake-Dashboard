@@ -5,64 +5,69 @@
 {% endblock %}
 
 {% block content %}
-<h1>Hier sind aktuelle Posts...</h1>
 
-<div class="row"> 
-    <div class="col s6 m6 offset-s3 offset-m2">
-        {% for post in context %}
-            <div class="card deep-purple lighten-2">
-                <div class="card-content white-text">
-                    <span class="card-title">{{ post.caption }}:</span>
-                    <span>Zeit: {{ post.time }}</span>
-                    <span>Late: {{ post.late }}</span>
-                    <div class="row image_row">
-                        <div class="col m5">
-                            <img class="center" src="{{ post.url1 }}" width="300px" height="400px">
-                            <p class="bildunterschrift">Front Camera</p>
+{% if info.type == 'today' %}
+<h1>Posts von heute</h1>
+{% elif info.type == 'user' %}
+<h1>Posts von {{ info.name }}</h1>
+{% endif %}
+
+<div class="post-container">
+    {% for post in context %}
+        <div class="post-wrapper">
+            <div class="user-banner">
+                <img src="{{ post.user.profile_picture }}" alt="" class="user-img">
+                <div class="user-info">
+                    <span class="username">
+                        {% if info.type == 'today' %}
+                            <a href="/user/{{ post.user.username }}">{{ post.user.username }}</a>
+                        {% elif info.type == 'user' %}
+                            {{ post.user.username }}
+                        {% endif %}
+                    </span>
+                    <span class="user-details">
+                        {% if post.metadata.location.location_name %}<a target="_blank" href="https://maps.google.com/?q={{ post.metadata.location.latitude }},{{ post.metadata.location.longitude }}">{{ post.metadata.location.location_name }}</a> • {% endif %}
+                        {{ post.time.late }}h late ({{ post.time.takenAt }} ➝ {{ post.time.creationTime }})</span>
+                </div>
+            </div>
+            <div class="post-content-wrapper">
+                <div class="row">
+                    <div class="col m6 s6">
+                        <img class="post-img" src="{{ post.url1 }}">
+                    </div>
+                    <div class="col m6 s6">
+                        <img class="post-img" src="{{ post.url2 }}">
+                    </div>
+                    {% if post.caption %}
+                    <div class="col s12 caption">
+                        <span class="small-heading">{{ post.caption }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="realmoji-wrapper">
+                    <span class="small-heading">RealMojis</span>
+                    <div class="realmoji-container">
+                        {% for image in post.realmojis %}
+                        <div class="realmoji">
+                            <img src="{{ image.url }}" class="realmoji-image">
+                            <span>{{ image.username }}</span>
                         </div>
-                        <div class="col m5">
-                            <img class="center" src="{{ post.url2 }}" width="300px" height="400px">
-                            <p class="bildunterschrift">Back Camera</p>
-                        </div>
-                        <div class="col m2">
-                            Reactions:
-                            {% for image in post.realmojis %}
-                                <img src="{{ image.url }}" width="100px" height="100px">
-                                <p>{{ image.username }}</p>
-                            {% endfor %}
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
-        {% endfor %}
-    </div>
+            <span class="small-heading">Kommentare</span>
+            {% for comment in post.comments %}
+                <p>{{ comment.username}}: {{ comment.text }}</p>
+                <!--<p>{{ comment.time }}</p>-->
+            {% endfor %}
+            <div class="input-field col s12">
+                <input id="comment-{{ post.id }}" type="text" placeholder="Kommentar hinzufügen...">
+            </div>
+        </div>
+    {% endfor %}
 </div>
 
-
-
-
-
-
-<style>
-    .card {
-        width: 1000px;
-    }
-    .username_header {
-        margin-left: 3.75%;
-    }
-    .center {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        /*margin-bottom: 10%;*/
-    }
-    .bildunterschrift {
-        text-align: center;
-    }
-    body {
-        background-color: aquamarine;
-    }
-</style>
 
 <script>
     $(document).ready(function(){
