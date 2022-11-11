@@ -2,6 +2,7 @@
 
 {% block links %}
     <link href="{{ url_for('static', filename='css/posts.css') }}" rel="stylesheet" type="text/css">
+    <script defer src="{{ url_for('static', filename='js/posts.js') }}" language="javascript" type="text/javascript"></script>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +17,9 @@
     {% for post in context %}
         <div class="post-wrapper">
             <div class="user-banner">
-                <img src="{{ post.user.profile_picture }}" alt="" class="user-img">
+                <a class="profile-photo-link" href="/user/{{ post.user.username }}">
+                    <img src="{{ post.user.profile_picture }}" alt="" class="user-img">
+                </a>
                 <div class="user-info">
                     <span class="username">
                         {% if info.type == 'today' %}
@@ -27,7 +30,13 @@
                     </span>
                     <span class="user-details">
                         {% if post.metadata.location.location_name %}<a target="_blank" href="https://maps.google.com/?q={{ post.metadata.location.latitude }},{{ post.metadata.location.longitude }}">{{ post.metadata.location.location_name }}</a> • {% endif %}
-                        {{ post.time.late }}h late ({{ post.time.takenAt }} ➝ {{ post.time.creationTime }})</span>
+                        {{ post.time.late }}h late ({{ post.time.takenAt }} ➝ {{ post.time.creationTime }})
+                    </span>
+                    <div class="copy_button_wrapper">
+                        <button class="custom-button waves-effect waves-light btn" onclick="copyPost('{{ post.id }}')">
+                            Kopiere die ID
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="post-content-wrapper">
@@ -53,7 +62,14 @@
                             <span>{{ image.username }}</span>
                         </div>
                         {% endfor %}
+                        <!--<div class="realmoji">
+                            <button class="waves-effect waves-light btn" onclick="">
+                                Reagiere mit Cringe
+                            </button>
+                        </div>-->
                     </div>
+
+                    
                 </div>
             </div>
             <span class="small-heading">Kommentare</span>
@@ -62,7 +78,8 @@
                 <!--<p>{{ comment.time }}</p>-->
             {% endfor %}
             <div class="input-field col s12">
-                <input id="comment-{{ post.id }}" type="text" placeholder="Kommentar hinzufügen...">
+                <input id="commentInput-{{ post.id }}" type="text" placeholder="Kommentar hinzufügen...">
+                <button class="custom-button waves-effect waves-light btn" onclick="addComment('{{ post.id }}')">Kommentar hinzufügen</button>
             </div>
         </div>
     {% endfor %}

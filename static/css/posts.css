@@ -39,9 +39,13 @@
 }
 
 .user-img {
+    width: 100%;
+    border-radius: 100%;
+}
+
+.profile-photo-link {
     width: clamp(50px, 5%, 5%);
     margin-right: 10px;
-    border-radius: 100%;
 }
 
 .user-info {
@@ -104,8 +108,13 @@
     border-radius: 100%;
 }
 
+
 .user-img:hover, .realmoji-image:hover {
-    animation: rotate 1s infinite ease;
+    --new_radius: 20px;
+    -webkit-border-radius: var(--new_radius);
+    -moz-border-radius: var(--new_radius);
+    border-radius: var(--new_radius);
+    /*animation: rotate 1s infinite ease;*/
 }
 
 @keyframes rotate {
@@ -125,4 +134,16 @@
 .input-field input[type=text]:focus {
     border-bottom: 1px solid #fff !important;
     box-shadow: 0 1px 0 0 #fff !important;
+}
+
+
+.custom-button {
+    background: black;
+    border: 2px solid white;
+    border-radius: 5px;
+}
+
+.custom-button:hover {
+    background: white;
+    color: black;
 }

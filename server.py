@@ -32,19 +32,14 @@ def user(name):
     return render_template('posts.html', info={"type": "user", "name": name}, context=models.posts(name))
 
 
-@app.route("/comment", methods=["GET", "POST"])
-def comment():
-    post_id = request.args.get('post_id')
-    if post_id is None:
-        return "No post id provided", 400
+@app.route("/comments/<post_id>", methods=["GET", "POST"])
+def comment(post_id):
     if request.method == "GET":
-        print("get request")
+        pass
     elif request.method == "POST":
-        print("post request")
-        print(request.form)
         if "content" not in request.form:
             return "No content provided", 400
         methods.add_comment(post_id, request.form["content"])
-    return f"comments for {post_id}"
+        return f"Added comment!"
 
 app.run()
