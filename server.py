@@ -1,7 +1,6 @@
 import json
 from flask import Flask, render_template
 from flask import request
-from sassutils.wsgi import SassMiddleware
 
 import models, methods
 
@@ -9,14 +8,9 @@ import models, methods
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-
-
 @app.route('/')
 def hello():
-    return render_template('base.html')
-
-
-
+    return render_template('welcome.html')
 
 @app.route('/today')
 def today():
@@ -42,4 +36,5 @@ def comment(post_id):
         methods.add_comment(post_id, request.form["content"])
         return f"Added comment!"
 
+#app.run(host="0.0.0.0", port="6000")
 app.run()
