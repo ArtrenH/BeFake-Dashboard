@@ -36,5 +36,12 @@ def comment(post_id):
         methods.add_comment(post_id, request.form["content"])
         return f"Added comment!"
 
+
+# In Progress:
+"""
+@app.route("/discovery")
+def discovery():
+    return render_template('discovery.html', context=models.compile_location_entries())
+"""
 #app.run(host="0.0.0.0", port="6000")
 app.run()

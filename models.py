@@ -8,9 +8,15 @@ from geopy.geocoders import Nominatim
 import BeFake.BeFake as BeFake
 from utils import sec_to_timestamp
 
-DATA_DIR = "BeFake/data"
-TOKEN_PATH = "BeFake/token.txt"
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
+#DATA_DIR = "BeFake/data"
+DATA_DIR = dir_path + "/../BeFake/data"
+#TOKEN_PATH = "BeFake/token.txt"
+TOKEN_PATH = dir_path + "/../BeFake/token.txt"
+
+OWN_DIR = dir_path
 
 
 # uses dict like in info.json
@@ -99,11 +105,16 @@ class UIRealmoji():
         self.type = data_dict.get("type", None)
         self.emoji = data_dict.get("emoji", None)
         self.uri = data_dict.get("uri", None)
+        if self.username in os.listdir(f"{DATA_DIR}/feeds/friends"):
+            self.friend = True
+        else:
+            self.friend = False
     
     def render(self):
         return {
             "url": self.uri,
-            "username": self.username
+            "username": self.username,
+            "friend": self.friend
         }
 
 
@@ -138,7 +149,7 @@ def second_stamp(seconds):
 
 def latest_posts():
     # for faster reload during development
-    #with open("dashboard/static/json/test.json", "r") as f:
+    #with open(f"{OWN_DIR}/static/json/test.json", "r") as f:
     #    return json.load(f)
     try:
         bf = BeFake.BeFake()
@@ -147,7 +158,7 @@ def latest_posts():
         return_data = [UIPost(elem.data_dict).render() for elem in bf.get_friends_feed()]
     except ReadTimeout:
         return_data = []
-    with open("dashboard/static/json/test.json", "w+") as f:
+    with open(f"{OWN_DIR}/static/json/test.json", "w+") as f:
         json.dump(return_data, f, indent=4)
     return return_data
 
@@ -174,8 +185,6 @@ def users():
         bf.get_user_profile(user_id) for user_id in user_ids
     ]]
     
-        
-
 
 def posts(username):
     print("posts called...")
@@ -190,10 +199,31 @@ def posts(username):
     return_data = sorted(return_data, key=lambda x: x["time"]["creationTime"], reverse=True)
     return return_data
 
+# In Progress
+"""
+def discovery_data():
+    with open(f"{OWN_DIR}/static/json/compiled_posts_extract.json", "r") as f:
+        return [elem for elem in json.load(f) if "location" in elem]
+
+
+from pymongo import MongoClient
+
+def get_entries():
+    client = MongoClient()
+    MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True)
+    db = client.bereal_tests
+    tutorial = db.posts
+    return tutorial.find({})
+
+def compile_location_entries():
+    entries = get_entries()
+    res = [{k: v for k, v in elem.items() if k in ["location", "userName", "id", "photoURL", "secondaryPhotoURL"]} for elem in entries if "location" in elem]
+    return res
+"""
 
 #users()
 
 if __name__ == "__main__":
     data = {'result': {'userName': 'pelleje', 'uid': 'XLwHWNFemyP3Cpf94Oy7YVUt8jt2', 'name': 'Pelle Lol', 'photoURL': 'Photos/XLwHWNFemyP3Cpf94Oy7YVUt8jt2/profile/XLwHWNFemyP3Cpf94Oy7YVUt8jt2-1661977371-profile-picture.jpg', 'biography': 'süß(nicht)', 'location': '', 'creationDate': {'_seconds': 1661864291, '_nanoseconds': 786000000}, 'commonFriends': ['tB7r5q5gZrVxftkWXZb0kHsIUK82', 'flWFmy4YPvNDbLFxSnuKf73Nwys2', 'B6wVEyDZ4gUIvoe8EWseMPoNM782', 'jM3PDsCqdyfjIFXarBxotyHEDNB2', 'FXjEeCwIRwXl6mHdcaOjixaDH6A2', 'OfJkmi38yRVm0eYsUAFfkjTQVPi2', 'H1wczdYINbatC5uEILeUnYrQLZ93', '8tpxaYsKa1aXmIJkaFiSn2vPkUk2']}}
-    with open("dashboard/static/json/example_user.json", "w+") as f:
+    with open(f"{OWN_DIR}/static/json/example_user.json", "w+") as f:
         json.dump(data, f, indent=4)

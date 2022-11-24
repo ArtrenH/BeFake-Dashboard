@@ -32,34 +32,43 @@
                         {% if post.metadata.location.location_name %}<a target="_blank" href="https://maps.google.com/?q={{ post.metadata.location.latitude }},{{ post.metadata.location.longitude }}">{{ post.metadata.location.location_name }}</a> • {% endif %}
                         {{ post.time.late }}h late ({{ post.time.takenAt }} ➝ {{ post.time.creationTime }})
                     </span>
-                    <div class="copy_button_wrapper">
+                    <span class="copy_button_wrapper">
                         <button class="custom-button waves-effect waves-light btn" onclick="copyPost('{{ post.id }}')">
                             Kopiere die ID
                         </button>
-                    </div>
+                    </span>
                 </div>
             </div>
             <div class="post-content-wrapper">
                 <div class="row">
                     <div class="col m6 s6">
-                        <img class="post-img" src="{{ post.url1 }}">
+                        <img class="materialboxed post-img" src="{{ post.url1 }}">
                     </div>
                     <div class="col m6 s6">
-                        <img class="post-img" src="{{ post.url2 }}">
+                        <img class="materialboxed post-img" src="{{ post.url2 }}">
                     </div>
+                    <div class="col s10 caption">
                     {% if post.caption %}
-                    <div class="col s12 caption">
                         <span class="small-heading">{{ post.caption }}</span>
+                        {% endif %}
                     </div>
-                    {% endif %}
+                    <div class="col s2 caption retake-caption">
+                        Retakes: {{ post.metadata.retakes }}
+                    </div>
                 </div>
                 <div class="realmoji-wrapper">
                     <span class="small-heading">RealMojis</span>
                     <div class="realmoji-container">
                         {% for image in post.realmojis %}
                         <div class="realmoji">
-                            <img src="{{ image.url }}" class="realmoji-image">
-                            <span>{{ image.username }}</span>
+                            <img src="{{ image.url }}" class="materialboxed realmoji-image">
+                            <span>
+                                {% if image.friend %}
+                                    <a href="/user/{{ image.username }}">{{ image.username }}</a>
+                                {% else %}
+                                    {{ image.username }}
+                                {% endif %}
+                            </span>
                         </div>
                         {% endfor %}
                         <!--<div class="realmoji">
@@ -74,7 +83,9 @@
             </div>
             <span class="small-heading">Kommentare</span>
             {% for comment in post.comments %}
-                <p>{{ comment.username}}: {{ comment.text }}</p>
+                <div class="card-panel comment-box">
+                    <p>{{ comment.username}}: {{ comment.text }}</p>
+                </div>
                 <!--<p>{{ comment.time }}</p>-->
             {% endfor %}
             <div class="input-field col s12">

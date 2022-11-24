@@ -17,3 +17,8 @@ function addComment(id) {
     document.getElementById("commentInput-" + id).value = "";
     location.reload();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.materialboxed');
+    var instances = M.Materialbox.init(elems, {});
+});

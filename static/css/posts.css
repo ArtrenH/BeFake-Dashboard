@@ -84,6 +84,9 @@
 .post-content-wrapper .realmoji-container {
     flex: 1;
 }
+.post-content-wrapper .retake-caption {
+    text-align: right;
+}
 
 .realmoji-container {
     display: flex;
@@ -106,6 +109,10 @@
 .realmoji-image {
     width: 100px;
     border-radius: 100%;
+}
+
+.realmoji-image.active {
+    border-radius: 5px !important;
 }
 
 
@@ -137,6 +144,7 @@
 }
 
 
+
 .custom-button {
     background: black;
     border: 2px solid white;
@@ -146,4 +154,13 @@
 .custom-button:hover {
     background: white;
     color: black;
+}
+
+.comment-box {
+    background: black;
+    border: 2px solid white;
+    border-radius: 5px;
+    padding: 0px;
+    padding-left: 10px;
+    margin-bottom: 5px;
 }
