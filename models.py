@@ -160,8 +160,8 @@ def latest_posts():
         return_data = [UIPost(elem.data_dict).render() for elem in bf.get_friends_feed()]
     except ReadTimeout:
         return_data = []
-    with open(f"{OWN_DIR}/static/json/test.json", "w+") as f:
-        json.dump(return_data, f, indent=4)
+    #with open(f"{OWN_DIR}/static/json/test.json", "w+") as f:
+    #    json.dump(return_data, f, indent=4)
     return return_data
 
 
