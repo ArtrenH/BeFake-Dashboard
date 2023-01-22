@@ -154,7 +154,7 @@ def latest_posts():
     #with open(f"{OWN_DIR}/static/json/test.json", "r") as f:
     #    return json.load(f)
     try:
-        bf = BeFake.BeFake()
+        bf = BeFake.BeFake("/root/.config/befake/token.txt")
         #bf.load(TOKEN_PATH)
         bf.load()
         return_data = [UIPost(elem.data_dict).render() for elem in bf.get_friends_feed()]
