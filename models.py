@@ -2,7 +2,7 @@ from httpx import ReadTimeout
 import os
 import json
 import datetime
-from geopy.geocoders import Nominatim
+#from geopy.geocoders import Nominatim
 
 
 import BeFake.BeFake as BeFake
