@@ -44,4 +44,5 @@ def discovery():
     return render_template('discovery.html', context=models.compile_location_entries())
 """
 #app.run(host="0.0.0.0", port="6000")
-app.run()
+if __name__ == "__main__":
+    app.run()
