@@ -36,7 +36,8 @@ class UIPost():
         self.latitude = data_dict.get("location", {}).get("_latitude", None)
         self.longitude = data_dict.get("location", {}).get("_longitude", None)
         self.location_name = None
-        if self.latitude:
+        self.location_name = f"{self.latitude}, {self.longitude}"
+        """if self.latitude:
             # this seems to take some time
             cur_loc = Nominatim(user_agent="test").reverse((self.latitude, self.longitude)).raw['address']
             if 'city' in cur_loc:
@@ -46,6 +47,7 @@ class UIPost():
                     self.location_name = f"{cur_loc['city']}, {cur_loc['suburb']}"
             elif 'village' in cur_loc:
                 self.location_name = f"{cur_loc['village']}, {cur_loc['county']}"
+        """
         
 
         # metadata auf steroirds
